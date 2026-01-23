@@ -6,11 +6,10 @@ function App() {
 
   return (
     <>
-     
-      <h1>Meal management system </h1>
+      <h1 className="text-red-500">Meal management system </h1>
       
     </>
-  )
+  );
 }
 
 export default App
