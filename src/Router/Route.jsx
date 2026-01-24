@@ -9,6 +9,7 @@ import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
 import AuthLayout from "../layout/AuthLayout";
 import Login from "../auth/Login";
+import Register from "../auth/Register";
 
 
 
@@ -51,7 +52,12 @@ export const router = createBrowserRouter([
     children:[{
       path:'/auth/login',
       element:<Login></Login>
-    }]
+    },
+    {
+      path:"/auth/register",
+      element:<Register></Register>
+    }
+  ]
   }
 ]);
 
