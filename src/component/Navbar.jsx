@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import Logo from './Logo';
 
 const Navbar = () => {
@@ -20,6 +20,14 @@ const Navbar = () => {
             to={"/add-meal"}
           >
             Add meal
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            to={"/add-expense"}
+          >
+            Add Expense
           </NavLink>
         </li>
         <li>
@@ -88,7 +96,7 @@ const Navbar = () => {
         
           </div>
           <div className="navbar-end">
-            <a className="btn">Button</a>
+          <Link to={"/auth/login"}>Login</Link>
           </div>
         </div>
         ;

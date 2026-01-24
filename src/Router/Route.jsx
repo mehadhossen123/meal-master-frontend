@@ -7,6 +7,8 @@ import AddMeal from "../pages/AddMeal";
 import Report from "../pages/Report";
 import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
+import AuthLayout from "../layout/AuthLayout";
+import Login from "../auth/Login";
 
 
 
@@ -17,27 +19,39 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element:<Home></Home>,
+        element: <Home></Home>,
       },
       {
-        path:"/add-meal",
-        element:<AddMeal></AddMeal>
+        path: "/add-meal",
+        element: <AddMeal></AddMeal>,
       },
       {
-        path:"/report",
-        element:<Report></Report>
-      }
+        path: "/report",
+        element: <Report></Report>,
+      },
+      {
+        path: "/add-expense",
+        element: <Report></Report>,
+      },
     ],
   },
   {
-    path:"/dashboard",
-    element:<DashboardLayout></DashboardLayout>,
-    children:[
-        {
-            path:"/dashboard",
-            element:<Dashboard></Dashboard>
-        }
-    ]
+    path: "/dashboard",
+    element: <DashboardLayout></DashboardLayout>,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard></Dashboard>,
+      },
+    ],
+  },
+  {
+    path:"/auth",
+    element:<AuthLayout></AuthLayout>,
+    children:[{
+      path:'/auth/login',
+      element:<Login></Login>
+    }]
   }
 ]);
 
