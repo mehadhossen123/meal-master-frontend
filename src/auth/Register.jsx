@@ -7,8 +7,23 @@ import { useForm } from "react-hook-form";
 const Register = () => {
    const {register,handleSubmit, formState:{errors} } = useForm()
 
-   const handleRegister=(data)=>{
-    console.log(data);
+   const handleRegister=async(data)=>{
+    // image upload and get link form image bb 
+    const imageFile = data.image[0];
+    const api_key = import.meta.env.VITE_IMGBB_API_KEY;
+    const image_hoisting_url = `https://api.imgbb.com/1/upload?key=${api_key}`;  
+    const formData=new FormData()
+    formData.append('image',imageFile)
+    // post image in the image bb
+    const response=await fetch(image_hoisting_url,{method:'POST',body:formData})
+    const result=await response.json();
+    const image=result.data.url;
+    
+    
+
+    
+   
+    
    }
   return (
     <div className="min-h-screen mt-20 flex items-center justify-center bg-gray-50 px-4 py-12">
