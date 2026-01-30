@@ -8,7 +8,9 @@ const Navbar = () => {
       <>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : ""
+            }
             to={"/"}
           >
             Home
@@ -16,7 +18,9 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : ""
+            }
             to={"/add-meal"}
           >
             Add meal
@@ -24,7 +28,9 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : ""
+            }
             to={"/add-expense"}
           >
             Add Expense
@@ -32,7 +38,9 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : ""
+            }
             to={"/report"}
           >
             Report
@@ -40,7 +48,9 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className={({ isActive }) => (isActive ? "text-red-500" : "")}
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : ""
+            }
             to={"dashboard"}
           >
             {" "}

@@ -2,8 +2,14 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
+   const {register,handleSubmit, formState:{errors} } = useForm()
+
+   const handleRegister=(data)=>{
+    console.log(data);
+   }
   return (
     <div className="min-h-screen mt-20 flex items-center justify-center bg-gray-50 px-4 py-12">
       <motion.div
@@ -27,18 +33,25 @@ const Register = () => {
         </div>
 
         {/* Form */}
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form
+          onSubmit={handleSubmit(handleRegister)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
           {/* Full Name */}
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Full Name
             </label>
             <input
+              {...register("name", { required: true })}
               type="text"
               placeholder="John Doe"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               required
             />
+            {errors.name && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
 
           {/* Email */}
@@ -47,14 +60,26 @@ const Register = () => {
               Email Address
             </label>
             <input
+              {...register("email", { required: true })}
               type="email"
               placeholder="example@mail.com"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               required
             />
+            {errors.email && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
-
-          {/* Mess Name */}
+          {/* profile image is here  */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Profile image
+            </label>
+            <input {...register('image',{required:true})} type="file" className="file-input file-input-secondary w-full" />
+            {errors.image && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
 
           {/* Password */}
           <div className="md:col-span-2">
@@ -62,11 +87,15 @@ const Register = () => {
               Password
             </label>
             <input
+              {...register("password", { required: true })}
               type="password"
               placeholder="••••••••"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               required
             />
+            {errors.password && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
 
           {/* Confirm Password */}
