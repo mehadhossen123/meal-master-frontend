@@ -2,8 +2,14 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+     const {register,handleSubmit, formState:{errors} } = useForm()
+
+     const handleLogin=(data)=>{
+        console.log(data)
+     }
   return (
     <div className="min-h-screen mt-20 flex items-center justify-center bg-gray-50 px-4">
       <motion.div
@@ -24,17 +30,21 @@ const Login = () => {
         </div>
 
         {/* Form */}
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
             </label>
             <input
+              {...register("email", { required: true })}
               type="email"
               placeholder="example@mail.com"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               required
             />
+            {errors.email && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
 
           <div>
@@ -42,11 +52,15 @@ const Login = () => {
               Password
             </label>
             <input
+              {...register("password", { required: true })}
               type="password"
               placeholder="••••••••"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
               required
             />
+            {errors.password && (
+              <span className="text-red-500">This field is required</span>
+            )}
           </div>
 
           <div className="flex items-center justify-between text-sm">
@@ -65,7 +79,7 @@ const Login = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-secondary text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
+            className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
           >
             Login Now
           </motion.button>
@@ -73,7 +87,7 @@ const Login = () => {
 
           <div className="w-full">
             {" "}
-            <button className="flex items-center justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium">
+            <button className="flex items-center cursor-pointer justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium">
               <svg
                 aria-label="Google logo"
                 width="20"
