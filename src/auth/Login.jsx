@@ -1,14 +1,34 @@
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "./AuthContext";
+import Swal from "sweetalert2";
 
 const Login = () => {
      const {register,handleSubmit, formState:{errors} } = useForm()
+     const{userLogin,user}=use(AuthContext)
 
      const handleLogin=(data)=>{
-        console.log(data)
+      userLogin(data.email,data.password).then(()=>{
+         Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: "Login successful",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+      }).catch(()=>{
+         Swal.fire({
+                      position: "error",
+                      icon: "success",
+                      title: "something went wrong",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+      })
+       
      }
   return (
     <div className="min-h-screen  flex items-center justify-center py-20 bg-gray-50 px-4">

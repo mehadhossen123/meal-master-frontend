@@ -13,8 +13,8 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { userRegister } = use(AuthContext);
-  console.log(register);
+  const { userRegister,user } = use(AuthContext);
+
   const axiosPublic = useAxios();
 
   const handleRegister = async (data) => {

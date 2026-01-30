@@ -1,8 +1,11 @@
-import React from "react";
+
 import { Link, NavLink } from "react-router";
 import Logo from "./Logo";
 
+
+
 const Navbar = () => {
+   
   
   const defaultUserImg =
     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
