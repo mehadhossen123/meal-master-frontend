@@ -7,6 +7,7 @@ const AuthProvider = ({children}) => {
     
     // auth info is here 
     const userRegister=(email,password)=>{
+        console.log(email,password)
         return createUserWithEmailAndPassword(auth,email,password)
     }
     const authInfo={

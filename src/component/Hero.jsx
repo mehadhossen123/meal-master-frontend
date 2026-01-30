@@ -3,8 +3,8 @@ import img from '../assets/img1.jpg'
 
 const Hero = () => {
     return (
-      <div>
-        <section className="grid md:grid-cols-2 grid-cols-1 mt-20">
+      <div className='pt-20'>
+        <section className="grid md:grid-cols-2 grid-cols-1 ">
           <div className="flex-1">
             {/* left side  */}
             <h1 className="lg:text-5xl text-2xl font-bold  leading-10 md:leading-20">

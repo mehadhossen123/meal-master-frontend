@@ -5,57 +5,66 @@ import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
+import useAxios from "../axios/useAxios";
 
 const Register = () => {
-   const {register,handleSubmit, formState:{errors} } = useForm()
-   const { userRegister } = use(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { userRegister } = use(AuthContext);
+  console.log(register);
+  const axiosPublic = useAxios();
 
-   const handleRegister=async(data)=>{
-    // image upload and get link form image bb 
+  const handleRegister = async (data) => {
+    // image upload and get link form image bb
     const imageFile = data.image[0];
     const api_key = import.meta.env.VITE_IMGBB_API_KEY;
-    const image_hoisting_url = `https://api.imgbb.com/1/upload?key=${api_key}`;  
-    const formData=new FormData()
-    formData.append('image',imageFile)
+    const image_hoisting_url = `https://api.imgbb.com/1/upload?key=${api_key}`;
+    const formData = new FormData();
+    formData.append("image", imageFile);
     // post image in the image bb
-    const response=await fetch(image_hoisting_url,{method:'POST',body:formData})
-    const result=await response.json();
-    userRegister(data.email,data.password).then((res)=>{
- const newUser = {
-   ...data,
-   image,
- };
-    
+    const response = await fetch(image_hoisting_url, {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    const imageUrl = result.data.url;
+    userRegister(data.email, data.password)
+      .then(async (res) => {
+        if (res.user) {
+          const newUser = {
+            name: data.name,
+            email: data.email,
+            image: imageUrl,
 
-
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "register successful",
-        showConfirmButton: false,
-        timer: 1500,
+            role: "member",
+          };
+          const result = await axiosPublic.post("/user", newUser);
+          if (result.data.insertedId) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "register successful",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       });
-
-    }).catch((err)=>{
-       Swal.fire({
-         position: "top-end",
-         icon: "error",
-         title: "something went wrong",
-         showConfirmButton: false,
-         timer: 1500,
-       });
-
-    })
-    const image=result.data.url;
-   
-    
-
-    
-   
-    
-   }
+  };
   return (
-    <div className="min-h-screen mt-20 flex items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="min-h-screen  flex items-center justify-center bg-gray-50 px-4 py-20">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -119,7 +128,11 @@ const Register = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Profile image
             </label>
-            <input {...register('image',{required:true})} type="file" className="file-input file-input-secondary w-full" />
+            <input
+              {...register("image", { required: true })}
+              type="file"
+              className="file-input file-input-secondary w-full"
+            />
             {errors.image && (
               <span className="text-red-500">This field is required</span>
             )}
@@ -159,7 +172,10 @@ const Register = () => {
 
           <div className="md:col-span-2 mt-2">
             {" "}
-            <button className="flex items-center justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium">
+            <button
+              type="button"
+              className="flex items-center justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium"
+            >
               <svg
                 aria-label="Google logo"
                 width="20"
