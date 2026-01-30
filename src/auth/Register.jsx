@@ -1,11 +1,14 @@
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "./AuthContext";
+import Swal from "sweetalert2";
 
 const Register = () => {
    const {register,handleSubmit, formState:{errors} } = useForm()
+   const { userRegister } = use(AuthContext);
 
    const handleRegister=async(data)=>{
     // image upload and get link form image bb 
@@ -17,8 +20,34 @@ const Register = () => {
     // post image in the image bb
     const response=await fetch(image_hoisting_url,{method:'POST',body:formData})
     const result=await response.json();
-    const image=result.data.url;
+    userRegister(data.email,data.password).then((res)=>{
+ const newUser = {
+   ...data,
+   image,
+ };
     
+
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "register successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+    }).catch((err)=>{
+       Swal.fire({
+         position: "top-end",
+         icon: "error",
+         title: "something went wrong",
+         showConfirmButton: false,
+         timer: 1500,
+       });
+
+    })
+    const image=result.data.url;
+   
     
 
     
