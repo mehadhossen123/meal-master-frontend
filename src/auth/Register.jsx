@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
 import useAxios from "../axios/useAxios";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
 const Register = () => {
   const {
@@ -13,7 +15,8 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { userRegister,user } = use(AuthContext);
+  const { userRegister} = use(AuthContext);
+  
 
   const axiosPublic = useAxios();
 
@@ -31,9 +34,14 @@ const Register = () => {
     });
     const result = await response.json();
     const imageUrl = result.data.url;
-    userRegister(data.email, data.password)
+   await userRegister(data.email, data.password)
       .then(async (res) => {
+       await updateProfile(auth.currentUser,{
+        displayName:data.name,
+        photoURL:imageUrl
+       });
         if (res.user) {
+          
           const newUser = {
             name: data.name,
             email: data.email,
@@ -43,6 +51,7 @@ const Register = () => {
           };
           const result = await axiosPublic.post("/user", newUser);
           if (result.data.insertedId) {
+           
             Swal.fire({
               position: "top-end",
               icon: "success",
