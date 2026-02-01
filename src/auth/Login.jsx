@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
@@ -9,11 +9,14 @@ import Swal from "sweetalert2";
 const Login = () => {
      const {register,handleSubmit, formState:{errors} } = useForm()
      const{userLogin,user}=use(AuthContext)
+     const [loading,setLoading]=useState(false)
 
      const handleLogin=(data)=>{
+      setLoading(true)
       userLogin(data.email,data.password).then(()=>{
+        setLoading(false)
          Swal.fire({
-                      position: "top-end",
+                      position: "center",
                       icon: "success",
                       title: "Login successful",
                       showConfirmButton: false,
@@ -97,11 +100,16 @@ const Login = () => {
           </div>
 
           <motion.button
+          disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
           >
-            Login Now
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              " Login Now"
+            )}
           </motion.button>
           {/* google login button */}
 

@@ -10,6 +10,7 @@ import Dashboard from "../pages/Dashboard";
 import AuthLayout from "../layout/AuthLayout";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
+import NotFound from "../pages/NotFound";
 
 
 
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
       element:<Register></Register>
     }
   ]
+  },
+  {
+    path:"*",
+    element:<NotFound></NotFound>
   }
 ]);
 

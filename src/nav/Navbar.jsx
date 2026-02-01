@@ -1,13 +1,20 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import Logo from "../component/Logo";
 import Swal from "sweetalert2";
+import Loading from "../component/Loading";
+
 
 const Navbar = () => {
-  const { user, logOut } = useContext(AuthContext);
-  console.log(user);
+  const { user, logOut,loading } = useContext(AuthContext);
+   const navigate = useNavigate();
+  if(loading){
+    return <Loading></Loading>
+  }
+ 
+
 
   const defaultUserImg =
     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
@@ -69,6 +76,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logOut().then(() => {
+        navigate("/")
       Swal.fire({
         position: "center",
         icon: "success",

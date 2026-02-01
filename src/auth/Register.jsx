@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Logo from "../component/Logo";
@@ -16,11 +16,13 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const { userRegister} = use(AuthContext);
+  const [loading,setLoading]=useState(false)
   
 
   const axiosPublic = useAxios();
 
   const handleRegister = async (data) => {
+    setLoading(true)
     // image upload and get link form image bb
     const imageFile = data.image[0];
     const api_key = import.meta.env.VITE_IMGBB_API_KEY;
@@ -36,7 +38,7 @@ const Register = () => {
     const imageUrl = result.data.url;
    await userRegister(data.email, data.password)
       .then(async (res) => {
-       await updateProfile(auth.currentUser,{
+       await updateProfile(res.user,{
         displayName:data.name,
         photoURL:imageUrl
        });
@@ -51,6 +53,7 @@ const Register = () => {
           };
           const result = await axiosPublic.post("/user", newUser);
           if (result.data.insertedId) {
+     
            
             Swal.fire({
               position: "top-end",
@@ -63,14 +66,17 @@ const Register = () => {
         }
       })
       .catch((err) => {
+        console.log(err)
         Swal.fire({
           position: "top-end",
           icon: "error",
-          title: "something went wrong",
+          title: `${err}`,
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3000,
         });
-      });
+      }).finally(()=>{
+        setLoading(false)
+      })
   };
   return (
     <div className="min-h-screen  flex items-center justify-center bg-gray-50 px-4 py-20">
@@ -169,11 +175,16 @@ const Register = () => {
           {/* Register Button */}
           <div className="md:col-span-2 ">
             <motion.button
+            disabled={loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
             >
-              Sign Up Now
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Sign Up Now"
+              )}
             </motion.button>
           </div>
 
