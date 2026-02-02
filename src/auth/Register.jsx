@@ -20,6 +20,7 @@ const Register = () => {
   
 
   const axiosPublic = useAxios();
+  
 
   const handleRegister = async (data) => {
     setLoading(true)

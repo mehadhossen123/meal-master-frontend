@@ -8,13 +8,13 @@ import Swal from "sweetalert2";
 
 const Login = () => {
      const {register,handleSubmit, formState:{errors} } = useForm()
-     const{userLogin,user}=use(AuthContext)
+     const{userLogin}=use(AuthContext)
      const [loading,setLoading]=useState(false)
 
      const handleLogin=(data)=>{
       setLoading(true)
       userLogin(data.email,data.password).then(()=>{
-        setLoading(false)
+        
          Swal.fire({
                       position: "center",
                       icon: "success",
@@ -30,7 +30,7 @@ const Login = () => {
                       showConfirmButton: false,
                       timer: 1500,
                     });
-      })
+      }).finally(()=>{setLoading(false)})
        
      }
   return (
@@ -100,7 +100,7 @@ const Login = () => {
           </div>
 
           <motion.button
-          disabled={loading}
+            disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
@@ -108,7 +108,7 @@ const Login = () => {
             {loading ? (
               <span className="loading loading-spinner"></span>
             ) : (
-              " Login Now"
+              "Login now"
             )}
           </motion.button>
           {/* google login button */}
