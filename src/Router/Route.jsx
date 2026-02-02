@@ -11,6 +11,8 @@ import AuthLayout from "../layout/AuthLayout";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import NotFound from "../pages/NotFound";
+import Expense from "../pages/Expense";
+import PrivateRoute from "./PrivateRoute";
 
 
 
@@ -29,17 +31,30 @@ export const router = createBrowserRouter([
       },
       {
         path: "/report",
-        element: <Report></Report>,
+        element: (
+          <PrivateRoute>
+            <Report></Report>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/add-expense",
-        element: <Report></Report>,
+        element: (
+          <PrivateRoute>
+            <Expense></Expense>
+          </PrivateRoute>
+        ),
       },
     ],
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+    element: (
+      <PrivateRoute>
+        {" "}
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/dashboard",
@@ -48,21 +63,22 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path:"/auth",
-    element:<AuthLayout></AuthLayout>,
-    children:[{
-      path:'/auth/login',
-      element:<Login></Login>
-    },
-    {
-      path:"/auth/register",
-      element:<Register></Register>
-    }
-  ]
+    path: "/auth",
+    element: <AuthLayout></AuthLayout>,
+    children: [
+      {
+        path: "/auth/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/auth/register",
+        element: <Register></Register>,
+      },
+    ],
   },
   {
-    path:"*",
-    element:<NotFound></NotFound>
-  }
+    path: "*",
+    element: <NotFound></NotFound>,
+  },
 ]);
 

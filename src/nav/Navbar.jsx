@@ -8,11 +8,9 @@ import Loading from "../component/Loading";
 
 
 const Navbar = () => {
-  const { user, logOut,loading } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
    const navigate = useNavigate();
-  if(loading){
-    return <Loading></Loading>
-  }
+ 
  
 
 
@@ -31,7 +29,7 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink
           className={({ isActive }) =>
             isActive ? "text-primary font-bold" : ""
@@ -40,7 +38,7 @@ const Navbar = () => {
         >
           Add meal
         </NavLink>
-      </li>
+      </li> */}
       <li>
         <NavLink
           className={({ isActive }) =>

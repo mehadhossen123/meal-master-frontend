@@ -1,6 +1,6 @@
 import React, { use, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
@@ -10,10 +10,15 @@ const Login = () => {
      const {register,handleSubmit, formState:{errors} } = useForm()
      const{userLogin}=use(AuthContext)
      const [loading,setLoading]=useState(false)
+     const location=useLocation();
+     const navigate=useNavigate()
+     
 
      const handleLogin=(data)=>{
       setLoading(true)
       userLogin(data.email,data.password).then(()=>{
+        navigate(location.state.location.pathname|| "/");
+
         
          Swal.fire({
                       position: "center",
