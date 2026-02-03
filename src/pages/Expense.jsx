@@ -1,12 +1,56 @@
-import React from "react";
+import React, { use } from "react";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
+import useAxios from "../axios/useAxios";
+import { AuthContext } from "../auth/AuthContext";
+import Swal from "sweetalert2";
 
 const Expense = () => {
-    const {register,handleSubmit,formState:{errors}}=useForm()
-    const handleExpense=(data)=>{
-        console.log(data)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
+  const publicAxios = useAxios();
+  const { user } = use(AuthContext);
+
+
+
+//   Submit expense into database 
+
+  const handleExpense = async (data) => {
+    try {
+      if (!user?.email) {
+        return;
+      }
+      const result = await publicAxios.post(
+        `/expenses?email=${user?.email}`,
+        data,
+      );
+      console.log(result.data);
+      if(result.data.insertedId){
+        reset()
+         Swal.fire({
+                              position: "center",
+                              icon: "success",
+                              title: "Expense Added successful",
+                              showConfirmButton: false,
+                              timer: 2000,
+                            });
+      }
+    } catch (error) {
+      console.log(error);
+       Swal.fire({
+         position: "center",
+         icon: "error",
+         title: "Expense Added successful",
+         showConfirmButton: false,
+         timer: 2000,
+       });
     }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-20 px-4">
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
@@ -14,7 +58,7 @@ const Expense = () => {
           <Logo></Logo>
         </h1>
 
-        <form onClick={handleSubmit(handleExpense)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleExpense)} className="space-y-4">
           {/* Product */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -127,8 +171,8 @@ const Expense = () => {
 
           {/* Button */}
           <button
-            type="button"
-            className="w-full bg-primary text-white py-2 rounded-md font-semibold transition"
+            type="submit"
+            className="w-full cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
           >
             Add Expense
           </button>
