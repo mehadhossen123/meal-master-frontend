@@ -7,28 +7,27 @@ import Swal from "sweetalert2";
 import Loading from "../component/Loading";
 import { motion } from "framer-motion";
 
-
 const Expense = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
-  const [bLoading,setBLoading]=useState(false);
-  console.log(user)
-  
+  const [bLoading, setBLoading] = useState(false);
 
-
-
-//   Submit expense into database 
+  //   Submit expense into database
 
   const handleExpense = async (data) => {
     try {
-        setBLoading(true)
-        const productDetails={...data,userEmail:user?.email,userName:user?.displayName}
+      setBLoading(true);
+      const productDetails = {
+        ...data,
+        userEmail: user?.email,
+        userName: user?.displayName,
+      };
       if (!user?.email) {
         return;
       }
@@ -36,28 +35,27 @@ const Expense = () => {
         `/expenses?email=${user?.email}`,
         productDetails,
       );
-      console.log(result.data);
-      if(result.data.insertedId){
-        reset()
-         Swal.fire({
-                              position: "center",
-                              icon: "success",
-                              title: "Expense Added successful",
-                              showConfirmButton: false,
-                              timer: 2000,
-                            });
+
+      if (result.data.insertedId) {
+        setBLoading(false);
+        reset();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Expense Added successful",
+          showConfirmButton: false,
+          timer: 2000,
+        });
       }
     } catch (error) {
       console.log(error.response);
-       Swal.fire({
-         position: "center",
-         icon: "error",
-         title: `${error?.response?.data?.message}`,
-         showConfirmButton: false,
-         timer: 2000,
-       }).finally(()=>{
-        setBLoading(false)
-       })
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `${error?.response?.data?.message}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 

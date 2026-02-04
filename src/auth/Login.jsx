@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router";
 import Logo from "../component/Logo";
@@ -14,18 +14,19 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { userLogin, userGoogleLogin,user } = use(AuthContext);
+  const { userLogin, userGoogleLogin, user } = use(AuthContext);
   const [bLoading, setBLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const publicAxios=useAxios()
- 
- 
+  const publicAxios = useAxios();
 
-  const handleLogin =  (data) => {
-  
-    setBLoading(true)
-    
+  useEffect(()=>{
+    window.scrollTo({top:0,left:0})
+  },[])
+
+  const handleLogin = (data) => {
+    setBLoading(true);
+
     userLogin(data.email, data.password)
       .then(() => {
         navigate(location?.state?.location?.pathname || "/");
@@ -52,46 +53,40 @@ const Login = () => {
       });
   };
 
+  const handleGoogleLogin = () => {
+    userGoogleLogin()
+      .then(async (res) => {
+        navigate(location?.state?.location?.pathname || "/");
+        if (res.user) {
+          console.log(res.user)
+          const newUser = {
+            name: res?.user?.displayName,
+            email: res?.user?.email,
+            image: res?.user?.photoURL,
 
-  const handleGoogleLogin=()=>{
-     userGoogleLogin().then(async(res)=>{
-       navigate(location?.state?.location?.pathname || "/");
-    if(res.user){
-       const newUser = {
-         name: res?.user?.displayName,
-         email:res?.user?.email,
-         image:res?.user?. imageUrl,
-
-         role: "member",
-         date:new Date().toISOString()
-       };
-      const result=await publicAxios.post('/user',newUser)
-      console.log("inside google provider ",result.data)
-       if (result.data.insertedId) {
-           
-                 
-                  Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "login successful",
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
-                }
-    }
-       
-     
-     }).catch((error)=>{
-       Swal.fire({
-         position: "center",
-         icon: "error",
-         title: "Something went wrong",
-         showConfirmButton: false,
-         timer: 1500,
-       });
-     })
-
-  }
+            role: "member",
+            date: new Date().toISOString(),
+          };
+          await publicAxios.post("/user", newUser);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "login successful",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: `${error}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+  };
   return (
     <div className="min-h-screen  flex items-center justify-center py-20 bg-gray-50 px-4">
       <motion.div
