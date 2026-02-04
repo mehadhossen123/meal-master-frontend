@@ -1,9 +1,12 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
 import useAxios from "../axios/useAxios";
 import { AuthContext } from "../auth/AuthContext";
 import Swal from "sweetalert2";
+import Loading from "../component/Loading";
+import { motion } from "framer-motion";
+
 
 const Expense = () => {
   const {
@@ -14,6 +17,8 @@ const Expense = () => {
   } = useForm();
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
+  const [bLoading,setBLoading]=useState(false);
+  
 
 
 
@@ -21,12 +26,14 @@ const Expense = () => {
 
   const handleExpense = async (data) => {
     try {
+        setBLoading(true)
+        const productDetails={...data,userEmail:user?.email,userName:user?.displayName}
       if (!user?.email) {
         return;
       }
       const result = await publicAxios.post(
         `/expenses?email=${user?.email}`,
-        data,
+        productDetails,
       );
       console.log(result.data);
       if(result.data.insertedId){
@@ -40,14 +47,16 @@ const Expense = () => {
                             });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
        Swal.fire({
          position: "center",
          icon: "error",
-         title: "Expense Added successful",
+         title: `${error?.response?.data?.message}`,
          showConfirmButton: false,
          timer: 2000,
-       });
+       }).finally(()=>{
+        setBLoading(false)
+       })
     }
   };
 
@@ -64,7 +73,10 @@ const Expense = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Product
             </label>
-            <select
+            <motion.select
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
               className="w-full border rounded-md px-3 py-2"
               {...register("product", { required: true })}
             >
@@ -83,7 +95,7 @@ const Expense = () => {
               <option>Onion</option>
               <option>Garlic</option>
               <option>Spices</option>
-            </select>
+            </motion.select>
             {errors.product && (
               <span className="text-red-500">This field is required</span>
             )}
@@ -95,7 +107,10 @@ const Expense = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Quantity
               </label>
-              <input
+              <motion.input
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
                 {...register("quantity", { required: true })}
                 type="number"
                 placeholder="e.g. 2"
@@ -110,7 +125,10 @@ const Expense = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Unit
               </label>
-              <select
+              <motion.select
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
                 className="w-full border rounded-md px-2 py-2"
                 {...register("unit", { required: true })}
               >
@@ -118,7 +136,7 @@ const Expense = () => {
                 <option>gram</option>
                 <option>pcs</option>
                 <option>litre</option>
-              </select>
+              </motion.select>
               {errors.unit && (
                 <span className="text-red-500">This field is required</span>
               )}
@@ -130,7 +148,10 @@ const Expense = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Total Price (৳)
             </label>
-            <input
+            <motion.input
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
               {...register("price", { required: true })}
               type="number"
               placeholder="e.g. 450"
@@ -146,7 +167,10 @@ const Expense = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Purchase Date
             </label>
-            <input
+            <motion.input
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
               type="date"
               {...register("date", { required: true })}
               className="w-full border rounded-md px-3 py-2"
@@ -161,7 +185,10 @@ const Expense = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Note (optional)
             </label>
-            <textarea
+            <motion.textarea
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
               {...register("note", { required: true })}
               placeholder="Extra information..."
               className="w-full border rounded-md px-3 py-2 resize-none"
@@ -171,10 +198,15 @@ const Expense = () => {
 
           {/* Button */}
           <button
+            disabled={bLoading}
             type="submit"
             className="w-full cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
           >
-            Add Expense
+            {bLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              " Add Expense"
+            )}
           </button>
         </form>
       </div>

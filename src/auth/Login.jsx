@@ -5,39 +5,49 @@ import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
+import Loading from "../component/Loading";
 
 const Login = () => {
-     const {register,handleSubmit, formState:{errors} } = useForm()
-     const{userLogin}=use(AuthContext)
-     const [loading,setLoading]=useState(false)
-     const location=useLocation();
-     const navigate=useNavigate()
-     
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { userLogin,setLoading } = use(AuthContext);
+  const [bLoading, setBLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+ 
 
-     const handleLogin=(data)=>{
-      setLoading(true)
-      userLogin(data.email,data.password).then(()=>{
-        navigate(location.state.location.pathname|| "/");
+  const handleLogin =  (data) => {
+  
+    setBLoading(true)
+    
+    userLogin(data.email, data.password)
+      .then(() => {
+        navigate(location?.state?.location?.pathname || "/");
 
-        
-         Swal.fire({
-                      position: "center",
-                      icon: "success",
-                      title: "Login successful",
-                      showConfirmButton: false,
-                      timer: 1500,
-                    });
-      }).catch(()=>{
-         Swal.fire({
-                      position: "error",
-                      icon: "success",
-                      title: "something went wrong",
-                      showConfirmButton: false,
-                      timer: 1500,
-                    });
-      }).finally(()=>{setLoading(false)})
-       
-     }
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Login successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .finally(() => {
+        setBLoading(false);
+      });
+  };
   return (
     <div className="min-h-screen  flex items-center justify-center py-20 bg-gray-50 px-4">
       <motion.div
@@ -105,12 +115,12 @@ const Login = () => {
           </div>
 
           <motion.button
-            disabled={loading}
+            disabled={bLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
           >
-            {loading ? (
+            {bLoading ? (
               <span className="loading loading-spinner"></span>
             ) : (
               "Login now"
