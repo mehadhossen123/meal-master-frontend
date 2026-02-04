@@ -6,13 +6,15 @@ import Home from "../pages/Home";
 import AddMeal from "../pages/AddMeal";
 import Report from "../pages/Report";
 import DashboardLayout from "../layout/DashboardLayout";
-import Dashboard from "../pages/Dashboard";
+
 import AuthLayout from "../layout/AuthLayout";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import NotFound from "../pages/NotFound";
 import Expense from "../pages/Expense";
 import PrivateRoute from "./PrivateRoute";
+import MyExpense from "./MyExpense";
+
 
 
 
@@ -47,18 +49,18 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        {" "}
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
     children: [
       {
-        path: "/dashboard",
-        element: <Dashboard></Dashboard>,
+        path: "/dashboard/my-expense",
+        element: <MyExpense></MyExpense>
       },
     ],
   },

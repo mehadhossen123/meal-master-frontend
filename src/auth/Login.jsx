@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
 import Loading from "../component/Loading";
-import useAxios from "../axios/useAxios";
+import useAxios from "../hook/axios/useAxios";
 
 const Login = () => {
   const {

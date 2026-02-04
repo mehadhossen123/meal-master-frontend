@@ -1,7 +1,7 @@
 import React, { use, useState } from "react";
 import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
-import useAxios from "../axios/useAxios";
+import useAxios from "../hook/axios/useAxios";
 import { AuthContext } from "../auth/AuthContext";
 import Swal from "sweetalert2";
 import Loading from "../component/Loading";

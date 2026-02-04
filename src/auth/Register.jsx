@@ -5,7 +5,7 @@ import Logo from "../component/Logo";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
-import useAxios from "../axios/useAxios";
+import useAxios from "../hook/axios/useAxios";
 import { updateProfile } from "firebase/auth";
 import PageWrapper from "../component/PageWrapper";
 
