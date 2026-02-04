@@ -18,6 +18,7 @@ const Expense = () => {
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
   const [bLoading,setBLoading]=useState(false);
+  console.log(user)
   
 
 

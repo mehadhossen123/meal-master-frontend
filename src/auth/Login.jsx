@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
 import Loading from "../component/Loading";
+import useAxios from "../axios/useAxios";
 
 const Login = () => {
   const {
@@ -13,10 +14,12 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { userLogin,setLoading } = use(AuthContext);
+  const { userLogin, userGoogleLogin,user } = use(AuthContext);
   const [bLoading, setBLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const publicAxios=useAxios()
+ 
  
 
   const handleLogin =  (data) => {
@@ -48,6 +51,47 @@ const Login = () => {
         setBLoading(false);
       });
   };
+
+
+  const handleGoogleLogin=()=>{
+     userGoogleLogin().then(async(res)=>{
+       navigate(location?.state?.location?.pathname || "/");
+    if(res.user){
+       const newUser = {
+         name: res?.user?.displayName,
+         email:res?.user?.email,
+         image:res?.user?. imageUrl,
+
+         role: "member",
+         date:new Date().toISOString()
+       };
+      const result=await publicAxios.post('/user',newUser)
+      console.log("inside google provider ",result.data)
+       if (result.data.insertedId) {
+           
+                 
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "login successful",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                }
+    }
+       
+     
+     }).catch((error)=>{
+       Swal.fire({
+         position: "center",
+         icon: "error",
+         title: "Something went wrong",
+         showConfirmButton: false,
+         timer: 1500,
+       });
+     })
+
+  }
   return (
     <div className="min-h-screen  flex items-center justify-center py-20 bg-gray-50 px-4">
       <motion.div
@@ -130,7 +174,10 @@ const Login = () => {
 
           <div className="w-full">
             {" "}
-            <button className="flex items-center cursor-pointer justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium">
+            <button
+              onClick={handleGoogleLogin}
+              className="flex items-center cursor-pointer justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium"
+            >
               <svg
                 aria-label="Google logo"
                 width="20"

@@ -51,6 +51,7 @@ const Register = () => {
             image: imageUrl,
 
             role: "member",
+            date:new Date().toISOString()
           };
           const result = await axiosPublic.post("/user", newUser);
           if (result.data.insertedId) {
