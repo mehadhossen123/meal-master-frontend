@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import Loading from "../component/Loading";
 import { motion } from "framer-motion";
 
-
 const Expense = () => {
   const {
     register,
@@ -32,8 +31,7 @@ const Expense = () => {
       if (!user?.email) {
         return;
       }
-      const result = await publicAxios.post(
-        `/expenses?email=${user?.email}`,
+      const result = await publicAxios.post( `/expenses?email=${user?.email}`,
         productDetails,
       );
 
@@ -200,7 +198,7 @@ const Expense = () => {
           <button
             disabled={bLoading}
             type="submit"
-            className="w-full cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
+            className="w-full hover:bg-secondary cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
           >
             {bLoading ? (
               <span className="loading loading-spinner"></span>

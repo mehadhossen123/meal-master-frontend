@@ -1,8 +1,12 @@
 import React from 'react';
 import { GiExpense } from 'react-icons/gi';
 import { Link, Outlet } from 'react-router';
+import useRole from '../hook/useRole';
+import { IoIosAdd } from 'react-icons/io';
 
 const DashboardLayout = () => {
+  const {userRole}=useRole()
+  console.log("User role ",userRole)
     return (
       <div>
         <div className="drawer lg:drawer-open">
@@ -34,7 +38,9 @@ const DashboardLayout = () => {
               <div className="px-4">Navbar Title</div>
             </nav>
             {/* Page content here */}
-            <div className="p-4"><Outlet></Outlet></div>
+            <div className="p-4">
+              <Outlet></Outlet>
+            </div>
           </div>
 
           <div className="drawer-side is-drawer-close:overflow-visible">
@@ -72,7 +78,7 @@ const DashboardLayout = () => {
                   </Link>
                 </li>
 
-                {/* List item */}
+                {/* My expense  */}
                 <li>
                   <Link
                     to={"/dashboard/my-expense"}
@@ -84,6 +90,23 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">My Expense</span>
                   </Link>
                 </li>
+
+                {/* Manager er role is here  */}
+                {userRole == "manager" && (
+                  <>
+                    <li>
+                      <Link
+                        to={"/dashboard/add-meal"}
+                        className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        data-tip="Add-meal"
+                      >
+                        {/* Settings icon */}
+                        <IoIosAdd />
+                        <span className="is-drawer-close:hidden">Add meal</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>

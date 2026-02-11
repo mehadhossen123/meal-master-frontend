@@ -62,6 +62,10 @@ export const router = createBrowserRouter([
         path: "/dashboard/my-expense",
         element: <MyExpense></MyExpense>
       },
+      {
+        path: "/dashboard/add-meal",
+        element:<AddMeal></AddMeal>
+      },
     ],
   },
   {
