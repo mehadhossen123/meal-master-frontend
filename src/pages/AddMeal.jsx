@@ -1,149 +1,188 @@
-import React from 'react';
-import Logo from '../component/Logo';
-import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import useUsers from '../hook/axios/useUsers';
- 
+import React, { use } from "react";
+import Logo from "../component/Logo";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import useUsers from "../hook/axios/useUsers";
+import useAxios from "../hook/axios/useAxios";
+import { AuthContext } from "../auth/AuthContext";
+import Swal from "sweetalert2";
 
 const AddMeal = () => {
-  const {register,handleSubmit,formState:{errors}}=useForm()
-  const {users}=useUsers();
-  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const { users } = useUsers();
+  const publicAxios = useAxios();
+  const { user } = use(AuthContext);
 
-  const handleAddMeal=(data)=>{
-const mealData={...data};
-   
-  }
-    return (
-      <div>
-        <div className="max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl border border-gray-100">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2 flex justify-center text-center">
-            <Logo></Logo>
-          </h2>
-          <p className="text-sm text-gray-500 text-center mb-8">
-            Enter meal count for the members
-          </p>
+  const handleAddMeal = async (data) => {
+    try {
+      const mealData = { ...data };
+      if (!user.email) {
+        return;
+      }
+      const result = await publicAxios.post(
+        `/meal?email=${user?.email}`,
+        mealData,
+      );
+      if (result.data.insertedId) {
+        reset();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Expense Added successful",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error.response);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `${error?.response?.data?.message}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+  };
+  return (
+    <div>
+      <div className="max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2 flex justify-center text-center">
+          <Logo></Logo>
+        </h2>
+        <p className="text-sm text-gray-500 text-center mb-8">
+          Enter meal count for the members
+        </p>
 
-          <form onSubmit={handleSubmit(handleAddMeal)}>
-            {/* Member Selection */}
-            <div className="form-control w-full mb-5">
+        <form onSubmit={handleSubmit(handleAddMeal)}>
+          {/* Member Selection */}
+          <div className="form-control w-full mb-5">
+            <label className="label">
+              <span className="label-text font-bold text-gray-700">
+                Select Member
+              </span>
+            </label>
+            <motion.select
+              {...register("name", { required: true })}
+              initial={{ opacity: 0, y: 70 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="select select-bordered w-full focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50"
+            >
+              {users.map((user) => (
+                <option value={user?.email} key={user._id}>
+                  {user?.name}
+                </option>
+              ))}
+            </motion.select>
+            {errors.name && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+
+          {/* Date Input */}
+          <div className="form-control w-full mb-5">
+            <label className="label">
+              <span className="label-text font-bold text-gray-700">
+                Select Date
+              </span>
+            </label>
+            <motion.input
+              {...register("date", { required: true })}
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              type="date"
+              className="input input-bordered w-full focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50"
+            />
+            {errors.date && (
+              <span className="text-red-500">This field is required</span>
+            )}
+          </div>
+
+          {/* Meal Count Section (Three Columns) */}
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            {/* Morning */}
+            <div className="form-control">
               <label className="label">
-                <span className="label-text font-bold text-gray-700">
-                  Select Member
-                </span>
-              </label>
-              <motion.select
-                {...register("name", { required: true })}
-                initial={{ opacity: 0, y: 70 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="select select-bordered w-full focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50"
-              >
-               {users.map(user=><option value={user?.email} key={user._id}>{user?.name}</option>)}
-                
-              </motion.select>
-              {errors.name && (
-                <span className="text-red-500">This field is required</span>
-              )}
-            </div>
-
-            {/* Date Input */}
-            <div className="form-control w-full mb-5">
-              <label className="label">
-                <span className="label-text font-bold text-gray-700">
-                  Select Date
+                <span className="label-text font-bold text-gray-600">
+                  Morning
                 </span>
               </label>
               <motion.input
-                {...register("date", { required: true })}
-                initial={{ opacity: 0, y: 60 }}
+                {...register("morning", { required: true })}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                type="date"
-                className="input input-bordered w-full focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50"
+                transition={{ duration: 0.8 }}
+                type="number"
+                step="0.5"
+                placeholder="0"
+                className="input input-bordered w-full text-center focus:border-primary"
               />
-              {errors.date && (
+              {errors.morning && (
                 <span className="text-red-500">This field is required</span>
               )}
             </div>
-
-            {/* Meal Count Section (Three Columns) */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              {/* Morning */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-bold text-gray-600">
-                    Morning
-                  </span>
-                </label>
-                <motion.input
-                  {...register("morning", { required: true })}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  type="number"
-                  step="0.5"
-                  placeholder="0"
-                  className="input input-bordered w-full text-center focus:border-primary"
-                />
-                {errors.morning && (
-                  <span className="text-red-500">This field is required</span>
-                )}
-              </div>
-              {/* Noon */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-bold text-gray-600">
-                    Noon
-                  </span>
-                </label>
-                <motion.input
-                  {...register("noon", { required: true })}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9 }}
-                  type="number"
-                  step="0.5"
-                  placeholder="0"
-                  className="input input-bordered w-full text-center focus:border-primary"
-                />
-                {errors.noon && (
-                  <span className="text-red-500">This field is required</span>
-                )}
-              </div>
-              {/* Night */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-bold text-gray-600">
-                    Night
-                  </span>
-                </label>
-                <motion.input
-                  {...register("night", { required: true })}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  type="number"
-                  step="0.5"
-                  placeholder="0"
-                  className="input input-bordered w-full text-center focus:border-primary"
-                />
-                {errors.night && (
-                  <span className="text-red-500">This field is required</span>
-                )}
-              </div>
-            </div>
-
-            {/* Submit Button */}
+            {/* Noon */}
             <div className="form-control">
-              <button type='submit' className="btn hover:bg-secondary btn-primary bg-primary w-full text-white shadow-md hover:shadow-lg transform transition active:scale-95">
-                Confirm & Add Meal
-              </button>
+              <label className="label">
+                <span className="label-text font-bold text-gray-600">Noon</span>
+              </label>
+              <motion.input
+                {...register("noon", { required: true })}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9 }}
+                type="number"
+                step="0.5"
+                placeholder="0"
+                className="input input-bordered w-full text-center focus:border-primary"
+              />
+              {errors.noon && (
+                <span className="text-red-500">This field is required</span>
+              )}
             </div>
-          </form>
-        </div>
+            {/* Night */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-bold text-gray-600">
+                  Night
+                </span>
+              </label>
+              <motion.input
+                {...register("night", { required: true })}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                type="number"
+                step="0.5"
+                placeholder="0"
+                className="input input-bordered w-full text-center focus:border-primary"
+              />
+              {errors.night && (
+                <span className="text-red-500">This field is required</span>
+              )}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="form-control">
+            <button
+              type="submit"
+              className="btn hover:bg-secondary btn-primary bg-primary w-full text-white shadow-md hover:shadow-lg transform transition active:scale-95"
+            >
+              Confirm & Add Meal
+            </button>
+          </div>
+        </form>
       </div>
-    );
+    </div>
+  );
 };
 
 export default AddMeal;
