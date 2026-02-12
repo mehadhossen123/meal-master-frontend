@@ -2,13 +2,17 @@ import React from 'react';
 import Logo from '../component/Logo';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import useUsers from '../hook/axios/useUsers';
  
 
 const AddMeal = () => {
   const {register,handleSubmit,formState:{errors}}=useForm()
+  const {users}=useUsers();
+  
 
   const handleAddMeal=(data)=>{
-    console.log("this is details abot meal",data)
+const mealData={...data};
+   
   }
     return (
       <div>
@@ -35,23 +39,8 @@ const AddMeal = () => {
                 transition={{ duration: 0.4 }}
                 className="select select-bordered w-full focus:ring-2 focus:ring-primary focus:outline-none bg-gray-50"
               >
-                <option disabled selected>
-                  Pick a member
-                </option>
-                <option>Mehad</option> {/* Dummy 1 */}
-                <option>Mosaref</option>
-                <option>Sakil</option>
-                <option>Liton</option>
-                <option>Riyaz</option>
-                <option>Rasel</option>
-                <option>Akash</option>
-                <option>Mehedy</option>
-                <option>Ali</option>
-                <option>Ibrahim</option>
-                <option>Tanvir</option>
-                <option>Osman</option>
-                <option>Hujur</option>
-                <option>Jahir</option>
+               {users.map(user=><option value={user?.email} key={user._id}>{user?.name}</option>)}
+                
               </motion.select>
               {errors.name && (
                 <span className="text-red-500">This field is required</span>

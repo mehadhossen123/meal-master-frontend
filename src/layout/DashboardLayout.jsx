@@ -4,9 +4,11 @@ import { Link, Outlet } from 'react-router';
 import useRole from '../hook/useRole';
 import { IoIosAdd } from 'react-icons/io';
 
+
 const DashboardLayout = () => {
   const {userRole}=useRole()
-  console.log("User role ",userRole)
+ 
+  
     return (
       <div>
         <div className="drawer lg:drawer-open">
