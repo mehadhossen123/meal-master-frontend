@@ -1,11 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { use, useRef } from "react";
+import React, { use, useRef, useState } from "react";
 import useAxios from "../hook/axios/useAxios";
 import { AuthContext } from "../auth/AuthContext";
 import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
 import Loading from "../component/Loading";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
+
 
 const MyExpense = () => {
   const publicAxios = useAxios();
@@ -27,6 +29,9 @@ const MyExpense = () => {
       
     } = useForm();
 
+    const [updatedId,setUpdatedId]=useState(null)
+     console.log("have to updated ", updatedId);
+
   // Total Expense Calculation 
   const totalExpense = allExpenses.reduce(
     (acc, current) => acc + parseFloat(current.price || 0),
@@ -37,6 +42,8 @@ const MyExpense = () => {
   if (isLoading) {
     return <Loading></Loading>
   }
+
+//   here is the delete expense  function 
 
  const handleExpenseDelete = (id) => {
    Swal.fire({
@@ -76,6 +83,14 @@ const MyExpense = () => {
      }
    });
  };
+
+//  expense update function is  here 
+
+const handleUpdate=(data)=>{
+    console.log(data)
+   
+
+}
 
   return (
     <div className="container mx-auto p-4">
@@ -120,6 +135,7 @@ const MyExpense = () => {
                     <button
                       onClick={() => {
                         modalRef.current.showModal();
+                        setUpdatedId(expense._id)
                       }}
                       className="btn btn-sm bg-green-500 text-white hover:bg-green-700"
                     >
@@ -161,7 +177,7 @@ const MyExpense = () => {
         <div className="modal-box">
           <h3 className="font-bold text-lg">Hello!</h3>
           {/* here is the form  */}
-          <form onSubmit={handleSubmit(handleExpense)} className="space-y-4">
+          <form onSubmit={handleSubmit(handleUpdate)} className="space-y-4">
             {/* Product */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
