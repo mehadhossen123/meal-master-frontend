@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import Logo from "../component/Logo";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -17,9 +17,11 @@ const AddMeal = () => {
   const { users } = useUsers();
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
+  const [bLoading, setBLoading] = useState(false);
 
   const handleAddMeal = async (data) => {
     try {
+      setBLoading(true)
       const mealData = { ...data };
       if (!user.email) {
         return;
@@ -30,10 +32,11 @@ const AddMeal = () => {
       );
       if (result.data.insertedId) {
         reset();
+        setBLoading(false)
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Expense Added successful",
+          title: "Meal Added successful",
           showConfirmButton: false,
           timer: 2000,
         });
@@ -68,7 +71,7 @@ const AddMeal = () => {
               </span>
             </label>
             <motion.select
-              {...register("name", { required: true })}
+              {...register("memberEmail", { required: true })}
               initial={{ opacity: 0, y: 70 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
@@ -80,7 +83,7 @@ const AddMeal = () => {
                 </option>
               ))}
             </motion.select>
-            {errors.name && (
+            {errors.memberEmail && (
               <span className="text-red-500">This field is required</span>
             )}
           </div>
@@ -172,11 +175,16 @@ const AddMeal = () => {
 
           {/* Submit Button */}
           <div className="form-control">
-            <button
+            <button 
+            disabled={bLoading}
               type="submit"
               className="btn hover:bg-secondary btn-primary bg-primary w-full text-white shadow-md hover:shadow-lg transform transition active:scale-95"
             >
-              Confirm & Add Meal
+              {bLoading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                " Confirm Add Meal"
+              )}
             </button>
           </div>
         </form>
