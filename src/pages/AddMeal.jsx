@@ -42,7 +42,7 @@ const AddMeal = () => {
         });
       }
     } catch (error) {
-      console.log(error.response);
+     
       Swal.fire({
         position: "center",
         icon: "error",
