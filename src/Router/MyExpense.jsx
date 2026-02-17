@@ -30,7 +30,7 @@ const MyExpense = () => {
     } = useForm();
 
     const [updatedId,setUpdatedId]=useState(null)
-     console.log("have to updated ", updatedId);
+    
 
   // Total Expense Calculation 
   const totalExpense = allExpenses.reduce(
@@ -86,8 +86,26 @@ const MyExpense = () => {
 
 //  expense update function is  here 
 
-const handleUpdate=(data)=>{
-    console.log(data)
+const handleUpdate=async(data)=>{
+ try{
+   const res = await publicAxios.patch(`/expenses/${updatedId}?email=${user?.email}`,data);
+   if(res.data.result.acknowledged==true){
+    refetch()
+     modalRef.current.close();
+     Swal.fire({
+       position: "center",
+       icon: "success",
+       title: "Meal Added successful",
+       showConfirmButton: false,
+       timer: 2000,
+     });
+   }
+  
+ }
+ catch(error){
+  console.log(error)
+ }
+  
    
 
 }
