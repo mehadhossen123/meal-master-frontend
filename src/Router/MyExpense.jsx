@@ -8,12 +8,15 @@ import Loading from "../component/Loading";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 
-
 const MyExpense = () => {
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
 
-  const { data: allExpenses = [], isLoading ,refetch} = useQuery({
+  const {
+    data: allExpenses = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["expenses", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -21,94 +24,90 @@ const MyExpense = () => {
       return res.data;
     },
   });
-  const modalRef=useRef();
-   const {
-      register,
-      handleSubmit,
-      formState: { errors },
-      
-    } = useForm();
+  const modalRef = useRef();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const [updatedId,setUpdatedId]=useState(null)
-    
+  const [updatedId, setUpdatedId] = useState(null);
+  const [value, setValue] = useState(null);
 
-  // Total Expense Calculation 
+  // Total Expense Calculation
   const totalExpense = allExpenses.reduce(
     (acc, current) => acc + parseFloat(current.price || 0),
     0,
   );
-//   Loading state dekhano 
+  //   Loading state dekhano
 
   if (isLoading) {
-    return <Loading></Loading>
+    return <Loading></Loading>;
   }
 
-//   here is the delete expense  function 
+  //   here is the delete expense  function
 
- const handleExpenseDelete = (id) => {
-   Swal.fire({
-     title: "Are you sure?",
-     text: "You won't be able to revert this!",
-     icon: "warning",
-     showCancelButton: true,
-     confirmButtonColor: "#3085d6",
-     cancelButtonColor: "#d33",
-     confirmButtonText: "Yes, delete it!",
-   }).then(async (result) => {
-     if (result.isConfirmed) {
-       try {
-         // API কল
-         const res = await publicAxios.delete(
-           `/expenses/${id}?email=${user?.email}`,
-         );
-         console.log(res)
+  const handleExpenseDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // API কল
+          const res = await publicAxios.delete(
+            `/expenses/${id}?email=${user?.email}`,
+          );
+          console.log(res);
 
-         
-         if (res.data.result.deletedCount > 0) {
-           refetch(); 
-           Swal.fire({
-             title: "Deleted!",
-             text: "Your expense has been deleted.",
-             icon: "success",
-           });
-         }
-       } catch (error) {
-         console.log(error.response);
-         Swal.fire({
-           icon: "error",
-           title: "Oops...",
-           text: error.response?.data?.message || "Something went wrong!",
-         });
-       }
-     }
-   });
- };
+          if (res.data.result.deletedCount > 0) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your expense has been deleted.",
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          console.log(error.response);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.response?.data?.message || "Something went wrong!",
+          });
+        }
+      }
+    });
+  };
 
-//  expense update function is  here 
+  //  expense update function is  here
 
-const handleUpdate=async(data)=>{
- try{
-   const res = await publicAxios.patch(`/expenses/${updatedId}?email=${user?.email}`,data);
-   if(res.data.result.acknowledged==true){
-    refetch()
-     modalRef.current.close();
-     Swal.fire({
-       position: "center",
-       icon: "success",
-       title: "Meal Added successful",
-       showConfirmButton: false,
-       timer: 2000,
-     });
-   }
-  
- }
- catch(error){
-  console.log(error)
- }
-  
-   
-
-}
+  const handleUpdate = async (data) => {
+    try {
+      const res = await publicAxios.patch(
+        `/expenses/${updatedId}?email=${user?.email}`,
+        data,
+      );
+      if (res.data.result.acknowledged == true) {
+        refetch();
+        modalRef.current.close();
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Meal Added successful",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -153,7 +152,8 @@ const handleUpdate=async(data)=>{
                     <button
                       onClick={() => {
                         modalRef.current.showModal();
-                        setUpdatedId(expense._id)
+                        setUpdatedId(expense._id);
+                        setValue(expense);
                       }}
                       className="btn btn-sm bg-green-500 text-white hover:bg-green-700"
                     >
@@ -201,7 +201,9 @@ const handleUpdate=async(data)=>{
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Product
               </label>
+
               <motion.select
+                defaultValue={value?.product}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -236,6 +238,7 @@ const handleUpdate=async(data)=>{
                   Quantity
                 </label>
                 <motion.input
+                  defaultValue={value?.quantity}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
@@ -254,6 +257,7 @@ const handleUpdate=async(data)=>{
                   Unit
                 </label>
                 <motion.select
+                  defaultValue={value?.unit}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
@@ -277,6 +281,7 @@ const handleUpdate=async(data)=>{
                 Total Price (৳)
               </label>
               <motion.input
+                defaultValue={value?.price}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -296,6 +301,7 @@ const handleUpdate=async(data)=>{
                 Purchase Date
               </label>
               <motion.input
+                defaultValue={value?.date}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -314,6 +320,7 @@ const handleUpdate=async(data)=>{
                 Note (optional)
               </label>
               <motion.textarea
+                defaultValue={value?.note}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -326,11 +333,10 @@ const handleUpdate=async(data)=>{
 
             {/* Button */}
             <button
-            
               type="submit"
               className="w-full hover:bg-secondary cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
             >
-             update 
+              update
             </button>
           </form>
           <div className="modal-action">
