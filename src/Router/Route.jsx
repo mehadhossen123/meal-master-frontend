@@ -15,6 +15,7 @@ import Expense from "../pages/Expense";
 import PrivateRoute from "./PrivateRoute";
 import MyExpense from "./MyExpense";
 import MyMeal from "./MyMeal";
+import MyProfile from "../pages/MyProfile";
 
 
 
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/my-expense",
         element: <MyExpense></MyExpense>
+      },
+      {
+        path: "/dashboard/my-profile",
+        element: <MyProfile></MyProfile>
       },
       {
         path: "/dashboard/add-meal",
