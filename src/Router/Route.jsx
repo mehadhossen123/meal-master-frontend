@@ -14,6 +14,7 @@ import NotFound from "../pages/NotFound";
 import Expense from "../pages/Expense";
 import PrivateRoute from "./PrivateRoute";
 import MyExpense from "./MyExpense";
+import MyMeal from "./MyMeal";
 
 
 
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/add-meal",
         element:<AddMeal></AddMeal>
+      },
+      {
+        path: "/dashboard/my-meal",
+        element:<MyMeal></MyMeal>
       },
     ],
   },
