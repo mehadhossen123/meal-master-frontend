@@ -2,16 +2,21 @@ import React, { use } from 'react';
 import { AuthContext } from '../auth/AuthContext';
 import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUserCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
+import useRole from '../hook/useRole';
 
 
 const MyProfile = () => {
     const {user}=use(AuthContext)
+    const {userRole}=useRole()
     return (
       <div>
         <motion.div
-        initial={{opacity:0,y:80}}
-        animate={{opacity:1,y:0}}
-        transition={{duration:0.9,ease:'easeInOut'}} className="min-h-screen bg-slate-50 p-4 md:p-10 font-sans text-slate-700">
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          className="min-h-screen bg-slate-50 p-4 md:p-10 font-sans text-slate-700"
+        >
           <div className="max-w-5xl mx-auto">
             {/* Profile Header Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-8">
@@ -24,7 +29,11 @@ const MyProfile = () => {
                   <div className="w-[250px] h-[220px] rounded-[2rem] bg-white p-2 shadow-xl">
                     <div className="w-full h-full rounded-2xl bg-slate-100 flex items-center justify-center overflow-hidden">
                       {/* User Image/Icon can go here */}
-                      <img className='w-full h-full rounded-full' src={user?.photoURL} alt="photo is coming" />
+                      <img
+                        className="w-full h-full rounded-full"
+                        src={user?.photoURL}
+                        alt="photo is coming"
+                      />
                       <div className="text-slate-300 text-4xl font-bold italic">
                         {user?.name?.charAt(0) || "M"}
                       </div>
@@ -37,7 +46,9 @@ const MyProfile = () => {
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest rounded-full border border-blue-100">
-                        Premium Member
+                        {userRole == "manager"
+                          ? " Mess Manager"
+                          : " Beautiful Member"}
                       </div>
                       <div className="text-slate-400 text-sm font-medium italic">
                         {user?.email}
@@ -45,9 +56,12 @@ const MyProfile = () => {
                     </div>
                   </div>
 
-                  <div className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold cursor-pointer hover:bg-slate-800 transition-all shadow-lg shadow-slate-200">
-                    Edit Profile
-                  </div>
+                  <Link
+                    to={"/auth/update"}
+                    className="px-6 py-3 bg-secondary text-white rounded-2xl text-sm font-bold cursor-pointer hover:bg-primary transition-all shadow-lg shadow-slate-200"
+                  >
+                    Update profile
+                  </Link>
                 </div>
               </div>
             </div>

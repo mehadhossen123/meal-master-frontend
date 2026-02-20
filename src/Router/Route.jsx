@@ -16,6 +16,7 @@ import PrivateRoute from "./PrivateRoute";
 import MyExpense from "./MyExpense";
 import MyMeal from "./MyMeal";
 import MyProfile from "../pages/MyProfile";
+import UpdateProfile from "../pages/UpdateProfile";
 
 
 
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
       {
         path: "/auth/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/auth/update",
+        element:<UpdateProfile></UpdateProfile>,
       },
     ],
   },

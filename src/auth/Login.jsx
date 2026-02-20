@@ -7,6 +7,7 @@ import { AuthContext } from "./AuthContext";
 import Swal from "sweetalert2";
 import Loading from "../component/Loading";
 import useAxios from "../hook/axios/useAxios";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const Login = () => {
   const {
@@ -19,6 +20,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const publicAxios = useAxios();
+  const [showPassword,setShowPassword]=useState(false)
 
   useEffect(()=>{
     window.scrollTo({top:0,left:0})
@@ -124,17 +126,25 @@ const Login = () => {
             )}
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Password
             </label>
-            <input
-              {...register("password", { required: true })}
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-              required
-            />
+            <div className="relative">
+              <input
+                {...register("password", { required: true })}
+                type={`${showPassword ? "text" : "password"}`}
+                placeholder="••••••••"
+                className="w-full px-4 py-3  rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                required
+              />
+              <div
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 flex items-center right-4 cursor-pointer "
+              >
+                {showPassword?<IoEyeOutline /> :<IoEyeOffOutline />}
+              </div>
+            </div>
             {errors.password && (
               <span className="text-red-500">This field is required</span>
             )}
