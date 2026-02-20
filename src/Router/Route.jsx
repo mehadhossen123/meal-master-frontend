@@ -17,6 +17,7 @@ import MyExpense from "./MyExpense";
 import MyMeal from "./MyMeal";
 import MyProfile from "../pages/MyProfile";
 import UpdateProfile from "../pages/UpdateProfile";
+import MyReport from "../pages/MyReport";
 
 
 
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/my-meal",
         element:<MyMeal></MyMeal>
+      },
+      {
+        path: "/dashboard/my-report",
+        element:<MyReport></MyReport>
       },
     ],
   },

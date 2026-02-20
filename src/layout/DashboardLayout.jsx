@@ -5,6 +5,7 @@ import useRole from "../hook/useRole";
 import { IoIosAdd } from "react-icons/io";
 import { MdNoMeals } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import { BiSolidReport } from "react-icons/bi";
 
 const DashboardLayout = () => {
   const { userRole } = useRole();
@@ -90,6 +91,17 @@ const DashboardLayout = () => {
                   {/* Settings icon */}
                   <CgProfile />
                   <span className="is-drawer-close:hidden">My Profile</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/dashboard/my-report"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="my-report"
+                >
+                  {/* Settings icon */}
+                  <BiSolidReport />
+                  <span className="is-drawer-close:hidden">My Report</span>
                 </Link>
               </li>
 

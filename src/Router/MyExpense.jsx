@@ -35,7 +35,7 @@ const MyExpense = () => {
   const [value, setValue] = useState(null);
 
   // Total Expense Calculation
-  const totalExpense = allExpenses.reduce(
+   const totalExpense = allExpenses.reduce(
     (acc, current) => acc + parseFloat(current.price || 0),
     0,
   );
