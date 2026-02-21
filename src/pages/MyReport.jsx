@@ -13,6 +13,8 @@ import useExpense from "../hook/useExpense";
 import useRole from "../hook/useRole";
 import useUsers from "../hook/axios/useUsers";
 import { AuthContext } from "../auth/AuthContext";
+import { motion } from "framer-motion";
+
 
 const MyReport = () => {
     const { user } = use(AuthContext);
@@ -51,7 +53,12 @@ const MyReport = () => {
   const personalBalance = Math.ceil(personalTotalExpense - personalMealCost);
 
   return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeInOut" }}
+      className="p-4 md:p-8 bg-gray-50 min-h-screen"
+    >
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
         <div className="mb-10 text-center md:text-left">
@@ -198,7 +205,7 @@ const MyReport = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

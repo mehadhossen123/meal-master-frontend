@@ -4,6 +4,8 @@ import { AuthContext } from "../auth/AuthContext";
 import useAxios from "../hook/axios/useAxios";
 import Loading from "../component/Loading";
 import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
+import { motion } from "framer-motion";
+
 
 const MyMeal = () => {
   const { user } = use(AuthContext);
@@ -21,7 +23,11 @@ const MyMeal = () => {
     return <Loading></Loading>;
   }
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeInOut" }}
+    >
       <h1 className="text-center md:text-4xl text-2xl font-bold mb-8">
         <span className="text-primary">Total </span> Meal List :
         <span className="text-secondary">{meals.length}</span>
@@ -69,7 +75,7 @@ const MyMeal = () => {
 
         {/* Empty State */}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

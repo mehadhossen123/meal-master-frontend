@@ -59,7 +59,7 @@ const DashboardLayout = () => {
               <li>
                 <Link to={"/"}>
                   <button
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip cursor-pointer is-drawer-close:tooltip-right"
                     data-tip="Homepage"
                   >
                     {/* Home icon */}

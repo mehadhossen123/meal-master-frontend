@@ -94,7 +94,12 @@ const MyExpense = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeInOut" }}
+      className="container mx-auto p-4"
+    >
       {/* Header Section */}
       <h1 className="text-center md:text-4xl text-2xl font-bold mb-8">
         <span className="text-primary">Total </span> Expense List :
@@ -209,6 +214,7 @@ const MyExpense = () => {
                 <option>Onion</option>
                 <option>Garlic</option>
                 <option>Spices</option>
+                <option>Others</option>
               </motion.select>
               {errors.product && (
                 <span className="text-red-500">This field is required</span>
@@ -331,7 +337,7 @@ const MyExpense = () => {
           </div>
         </div>
       </dialog>
-    </div>
+    </motion.div>
   );
 };
 

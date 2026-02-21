@@ -54,7 +54,12 @@ const AddMeal = () => {
   };
   return (
     <div>
-      <div className="max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl border border-gray-100">
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeInOut" }}
+        className="max-w-lg mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl border border-gray-100"
+      >
         <h2 className="text-2xl font-bold text-gray-800 mb-2 flex justify-center text-center">
           <Logo></Logo>
         </h2>
@@ -175,8 +180,8 @@ const AddMeal = () => {
 
           {/* Submit Button */}
           <div className="form-control">
-            <button 
-            disabled={bLoading}
+            <button
+              disabled={bLoading}
               type="submit"
               className="btn hover:bg-secondary btn-primary bg-primary w-full text-white shadow-md hover:shadow-lg transform transition active:scale-95"
             >
@@ -188,7 +193,7 @@ const AddMeal = () => {
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };
