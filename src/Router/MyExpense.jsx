@@ -1,4 +1,3 @@
-
 import React, { use, useRef, useState } from "react";
 import useAxios from "../hook/axios/useAxios";
 import { AuthContext } from "../auth/AuthContext";
@@ -10,7 +9,6 @@ import { motion } from "framer-motion";
 import useExpense from "../hook/useExpense";
 
 const MyExpense = () => {
-  
   const modalRef = useRef();
   const {
     register,
@@ -20,14 +18,12 @@ const MyExpense = () => {
 
   const [updatedId, setUpdatedId] = useState(null);
   const [value, setValue] = useState(null);
-
+  const { user } = use(AuthContext);
   const { refetch, isLoading, personalTotalExpense, personalExpense } =
-    useExpense();
-  const {user}=use(AuthContext)
-  const publicAxios=useAxios()
+    useExpense({ selectedEmail: user?.email });
 
- 
-  
+  const publicAxios = useAxios();
+
   //   Loading state dekhano
 
   if (isLoading) {
@@ -63,7 +59,6 @@ const MyExpense = () => {
             });
           }
         } catch (error) {
-          
           Swal.fire({
             icon: "error",
             title: "Oops...",
