@@ -6,7 +6,7 @@ import useAxios from './axios/useAxios';
 const useMeal = () => {
     const {user}=use(AuthContext)
     const publicAxios=useAxios()
-     const { data: meals, isLoading } = useQuery({
+     const { data: meals, isLoading:personalMealLoading } = useQuery({
        queryKey: ["meal", user?.email],
        enabled: !!user?.email,
        queryFn: async () => {
@@ -15,7 +15,7 @@ const useMeal = () => {
        },
      });
 
-      const totalMeals = meals.reduce((sum, meal) => {
+      const personalTotalMeals = (meals||[]).reduce((sum, meal) => {
         return (
           sum +
           parseFloat(meal.morning) +
@@ -24,8 +24,31 @@ const useMeal = () => {
         );
       }, 0);
 
+       const { data: allMeals, isLoading:allMealLoading } = useQuery({
+         queryKey: ["meal/all",],
+         enabled: !!user,
+         queryFn: async () => {
+           const res = await publicAxios.get(`/meal/all`);
+           return res?.data;
+         },
+       });
 
-    return {isLoading,totalMeals}
+         const totalMeals = (allMeals || []).reduce((sum, meal) => {
+           return (
+             sum +
+             parseFloat(meal.morning) +
+             parseFloat(meal.noon) +
+             parseFloat(meal.night)
+           );
+         }, 0);
+
+
+    return {
+      personalMealLoading,
+      personalTotalMeals,
+      totalMeals,
+      allMealLoading,
+    };
 };
 
 export default useMeal;

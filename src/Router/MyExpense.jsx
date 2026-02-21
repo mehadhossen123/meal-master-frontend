@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+
 import React, { use, useRef, useState } from "react";
 import useAxios from "../hook/axios/useAxios";
 import { AuthContext } from "../auth/AuthContext";
@@ -7,23 +7,10 @@ import Swal from "sweetalert2";
 import Loading from "../component/Loading";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import useExpense from "../hook/useExpense";
 
 const MyExpense = () => {
-  const publicAxios = useAxios();
-  const { user } = use(AuthContext);
-
-  const {
-    data: allExpenses = [],
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["expenses", user?.email],
-    enabled: !!user?.email,
-    queryFn: async () => {
-      const res = await publicAxios.get(`/expenses?email=${user?.email}`);
-      return res.data;
-    },
-  });
+  
   const modalRef = useRef();
   const {
     register,
@@ -34,11 +21,13 @@ const MyExpense = () => {
   const [updatedId, setUpdatedId] = useState(null);
   const [value, setValue] = useState(null);
 
-  // Total Expense Calculation
-   const totalExpense = allExpenses.reduce(
-    (acc, current) => acc + parseFloat(current.price || 0),
-    0,
-  );
+  const { refetch, isLoading, personalTotalExpense, personalExpense } =
+    useExpense();
+  const {user}=use(AuthContext)
+  const publicAxios=useAxios()
+
+ 
+  
   //   Loading state dekhano
 
   if (isLoading) {
@@ -74,7 +63,7 @@ const MyExpense = () => {
             });
           }
         } catch (error) {
-          console.log(error.response);
+          
           Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -114,7 +103,7 @@ const MyExpense = () => {
       {/* Header Section */}
       <h1 className="text-center md:text-4xl text-2xl font-bold mb-8">
         <span className="text-primary">Total </span> Expense List :
-        <span className="text-secondary">{allExpenses.length}</span>
+        <span className="text-secondary">{personalExpense.length}</span>
       </h1>
 
       {/* Table Section */}
@@ -133,7 +122,7 @@ const MyExpense = () => {
 
           {/* Table Body */}
           <tbody>
-            {allExpenses.map((expense, i) => (
+            {personalExpense.map((expense, i) => (
               <tr key={expense._id} className="hover">
                 <th className="text-center font-bold">{i + 1}</th>
                 <td className="text-center font-bold">{expense.product}</td>
@@ -166,14 +155,14 @@ const MyExpense = () => {
           </tbody>
 
           {/* Table Footer - This aligns Total Cost exactly under Price */}
-          {allExpenses.length > 0 && (
+          {personalExpense.length > 0 && (
             <tfoot className="bg-gray-50">
               <tr>
                 <th colSpan="3" className="text-right font-bold text-lg pt-4">
                   Total Cost:
                 </th>
                 <th className="text-center font-bold text-xl text-secondary pt-4 border-t-2">
-                  {totalExpense.toLocaleString()} ৳
+                  {personalTotalExpense.toLocaleString()} ৳
                 </th>
                 <th></th>
               </tr>
@@ -182,7 +171,7 @@ const MyExpense = () => {
         </table>
 
         {/* Empty State */}
-        {allExpenses.length === 0 && (
+        {personalExpense.length === 0 && (
           <div className="text-center p-10 text-gray-500">
             No expenses found for this user.
           </div>

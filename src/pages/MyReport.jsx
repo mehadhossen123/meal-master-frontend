@@ -1,15 +1,31 @@
-import React from "react";
+import React, { use } from "react";
 import { FaUtensils, FaWallet, FaCoins } from "react-icons/fa";
 import useMeal from "../hook/useMeal";
 import Loading from "../component/Loading";
+import useExpense from "../hook/useExpense";
 
 const MyReport = () => {
-    const { totalMeals, isLoading } = useMeal();
-    if(isLoading){
-        return <Loading></Loading>
+    const { personalTotalMeals, personalMealLoading, allMealLoading } =
+      useMeal();
+    const {
+      personalTotalExpense,
+      allExpenses,
+      allExpensesLoading,
+      personalExpenseLoading,
+    } = useExpense();
+
+    if (
+      allMealLoading ||
+      personalMealLoading ||
+      personalExpenseLoading ||
+      allExpensesLoading
+    ) {
+      return <Loading></Loading>;
     }
    
-    console.log("total meal",totalMeals)
+    console.log("total meal", personalTotalMeals);
+    console.log("personal total expenses", personalTotalExpense);
+    console.log("all expenses", allExpenses);
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
