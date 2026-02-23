@@ -4,11 +4,39 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUserCircle } from 'react-icons/f
 import { motion } from 'framer-motion';
 import { Link } from 'react-router';
 import useRole from '../hook/useRole';
+import useMeal from '../hook/useMeal';
+import useExpense from '../hook/useExpense';
 
 
 const MyProfile = () => {
     const {user}=use(AuthContext)
     const {userRole}=useRole()
+    const {
+      personalTotalMeals,
+
+      totalMeals,
+    } = useMeal({ selectedEmail:user?.email});
+
+     const {
+       personalTotalExpense,
+       allExpenses,
+      
+     } = useExpense({selectedEmail:user?.email});
+
+
+
+     
+      
+
+       const perMealCost =
+         totalMeals > 0 ? (allExpenses / totalMeals).toFixed(2) : 0;
+
+          const personalMealCost = Math.ceil(personalTotalMeals * perMealCost);
+           const personalBalance = Math.ceil(
+             personalTotalExpense - personalMealCost,
+           );
+
+
     return (
       <div>
         <motion.div
@@ -72,14 +100,16 @@ const MyProfile = () => {
                 <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
                   Total Meal
                 </div>
-                <div className="text-3xl font-black text-slate-800">45.5</div>
+                <div className="text-3xl font-black text-slate-800">
+                  {personalTotalMeals}
+                </div>
               </div>
               <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
                 <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
                   Balance
                 </div>
                 <div className="text-3xl font-black text-green-600">
-                  ৳ 1,420
+                  {personalBalance}
                 </div>
               </div>
               <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
