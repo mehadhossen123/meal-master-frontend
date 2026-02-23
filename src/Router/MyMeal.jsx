@@ -36,14 +36,14 @@ const MyMeal = () => {
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="table w-full">
           {/* Table Head */}
-          <thead className="bg-gray-100">
+          <thead className="">
             <tr>
-              <th className="text-center font-bold">#</th>
-              <th className="text-center font-bold">Date</th>
-              <th className="text-center font-bold">Morning</th>
-              <th className="text-center font-bold ">Noon</th>
-              <th className="text-center font-bold">Night</th>
-              <th className="text-center font-bold">Action</th>
+              <th className="text-center  font-bold">#</th>
+              <th className="text-center  font-bold">Date</th>
+              <th className="text-center  font-bold">Morning</th>
+              <th className="text-center  font-bold ">Noon</th>
+              <th className="text-center  font-bold">Night</th>
+              <th className="text-center  font-bold">Action</th>
             </tr>
           </thead>
 

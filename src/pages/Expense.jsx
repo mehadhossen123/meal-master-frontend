@@ -59,10 +59,10 @@ const Expense = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-20 px-4">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6">
+    <div className="min-h-screen flex items-center justify-center py-20 px-4">
+      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 transition">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6 flex justify-center">
-          <Logo></Logo>
+          <Logo />
         </h1>
 
         <form onSubmit={handleSubmit(handleExpense)} className="space-y-4">
@@ -75,10 +75,11 @@ const Expense = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full border rounded-md px-3 py-2"
+              /* dark: মোডেও bg-white এবং text-gray-800 ফোর্স করা হয়েছে */
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800"
               {...register("product", { required: true })}
             >
-              <option>Select product</option>
+              <option className="text-gray-700">Select product</option>
               <option>Fish</option>
               <option>Chicken</option>
               <option>Beef</option>
@@ -95,7 +96,9 @@ const Expense = () => {
               <option>Spices</option>
             </motion.select>
             {errors.product && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
             )}
           </div>
 
@@ -112,11 +115,8 @@ const Expense = () => {
                 {...register("quantity", { required: true })}
                 type="number"
                 placeholder="e.g. 2"
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800"
               />
-              {errors.quantity && (
-                <span className="text-red-500">This field is required</span>
-              )}
             </div>
 
             <div className="w-28">
@@ -127,7 +127,7 @@ const Expense = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="w-full border rounded-md px-2 py-2"
+                className="w-full border border-gray-300 rounded-md px-2 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800"
                 {...register("unit", { required: true })}
               >
                 <option>kg</option>
@@ -135,9 +135,6 @@ const Expense = () => {
                 <option>pcs</option>
                 <option>litre</option>
               </motion.select>
-              {errors.unit && (
-                <span className="text-red-500">This field is required</span>
-              )}
             </div>
           </div>
 
@@ -153,11 +150,8 @@ const Expense = () => {
               {...register("price", { required: true })}
               type="number"
               placeholder="e.g. 450"
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800"
             />
-            {errors.price && (
-              <span className="text-red-500">This field is required</span>
-            )}
           </div>
 
           {/* Date */}
@@ -171,11 +165,8 @@ const Expense = () => {
               transition={{ duration: 0.6 }}
               type="date"
               {...register("date", { required: true })}
-              className="w-full border rounded-md px-3 py-2"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800"
             />
-            {errors.date && (
-              <span className="text-red-500">This field is required</span>
-            )}
           </div>
 
           {/* Note */}
@@ -187,10 +178,10 @@ const Expense = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              {...register("note", { required: true })}
+              {...register("note")}
               placeholder="Extra information..."
-              className="w-full border rounded-md px-3 py-2 resize-none"
               rows="3"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-white text-gray-800 dark:text-gray-800 resize-none"
             />
           </div>
 
@@ -198,12 +189,12 @@ const Expense = () => {
           <button
             disabled={bLoading}
             type="submit"
-            className="w-full hover:bg-secondary cursor-pointer bg-primary text-white py-2 rounded-md font-semibold transition"
+            className="w-full bg-primary hover:bg-secondary text-white py-2 rounded-md font-semibold transition"
           >
             {bLoading ? (
               <span className="loading loading-spinner"></span>
             ) : (
-              " Add Expense"
+              "Add Expense"
             )}
           </button>
         </form>

@@ -90,7 +90,7 @@ const Login = () => {
       });
   };
   return (
-    <div className="min-h-screen  flex items-center justify-center py-20 bg-gray-50 px-4">
+    <div className="min-h-screen  flex items-center justify-center py-20 px-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -110,6 +110,7 @@ const Login = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
+          {/* Email */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
@@ -118,38 +119,57 @@ const Login = () => {
               {...register("email", { required: true })}
               type="email"
               placeholder="example@mail.com"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl 
+        border border-gray-200
+        bg-white
+        text-gray-800
+        focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+        outline-none transition-all"
               required
             />
             {errors.email && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
             )}
           </div>
 
+          {/* Password */}
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Password
             </label>
+
             <div className="relative">
               <input
                 {...register("password", { required: true })}
-                type={`${showPassword ? "text" : "password"}`}
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="w-full px-4 py-3  rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl 
+          border border-gray-200
+          bg-white
+          text-gray-800
+          focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+          outline-none transition-all"
                 required
               />
+
               <div
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 flex items-center right-4 cursor-pointer "
+                className="absolute inset-y-0 flex items-center right-4 cursor-pointer text-gray-600"
               >
-                {showPassword?<IoEyeOutline /> :<IoEyeOffOutline />}
+                {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
               </div>
             </div>
+
             {errors.password && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
             )}
           </div>
 
+          {/* Remember & Forgot */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center text-gray-600 cursor-pointer">
               <input
@@ -158,16 +178,18 @@ const Login = () => {
               />
               Remember me
             </label>
+
             <a href="#" className="text-primary font-semibold hover:underline">
               Forgot password?
             </a>
           </div>
 
+          {/* Login Button */}
           <motion.button
             disabled={bLoading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors"
+            className="w-full bg-secondary cursor-pointer text-white font-bold py-3 rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
           >
             {bLoading ? (
               <span className="loading loading-spinner"></span>
@@ -175,13 +197,18 @@ const Login = () => {
               "Login now"
             )}
           </motion.button>
-          {/* google login button */}
 
+          {/* Google Login */}
           <div className="w-full">
-            {" "}
             <button
               onClick={handleGoogleLogin}
-              className="flex items-center cursor-pointer justify-center gap-3 w-full bg-white text-black border border-[#e5e5e5] py-3 rounded-xl hover:bg-gray-50 transition-all font-medium"
+              type="button"
+              className="flex items-center cursor-pointer justify-center gap-3 
+        w-full bg-white
+        text-black
+        border border-gray-200
+        py-3 rounded-xl
+        hover:bg-gray-50 transition-all font-medium"
             >
               <svg
                 aria-label="Google logo"
@@ -210,7 +237,7 @@ const Login = () => {
                   ></path>
                 </g>
               </svg>
-              sign up with Google
+              Sign up with Google
             </button>
           </div>
         </form>

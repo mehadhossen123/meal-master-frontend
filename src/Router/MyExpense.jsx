@@ -110,7 +110,7 @@ const MyExpense = () => {
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="table w-full">
           {/* Table Head */}
-          <thead className="bg-gray-100">
+          <thead className="">
             <tr>
               <th className="text-center font-bold">#</th>
               <th className="text-center font-bold">Product Name</th>
@@ -156,7 +156,7 @@ const MyExpense = () => {
 
           {/* Table Footer - This aligns Total Cost exactly under Price */}
           {personalExpense.length > 0 && (
-            <tfoot className="bg-gray-50">
+            <tfoot className="">
               <tr>
                 <th colSpan="3" className="text-right font-bold text-lg pt-4">
                   Total Cost:
