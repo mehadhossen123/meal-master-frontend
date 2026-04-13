@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import useAxios from "../hook/axios/useAxios";
 import Loading from "../component/Loading";
@@ -7,14 +7,17 @@ import { MdModeEditOutline, MdOutlineDeleteOutline } from "react-icons/md";
 import { motion } from "framer-motion";
 
 
+
 const MyMeal = () => {
   const { user } = use(AuthContext);
+  const [selectedMonth,setSelectedMonth]=useState(new Date().toISOString().substring(0,7))
+  console.log("member want to see : ",selectedMonth)
   const publicAxios = useAxios();
-  const { data: meals, isLoading } = useQuery({
-    queryKey: ["meal", user?.email],
+  const { data: meals=[], isLoading } = useQuery({
+    queryKey: ["meal", user?.email,selectedMonth],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await publicAxios.get(`/meal?email=${user?.email}`);
+      const res = await publicAxios.get(`/meal?email=${user?.email}&month=${selectedMonth}`);
       return res?.data;
     },
   });
@@ -32,6 +35,12 @@ const MyMeal = () => {
         <span className="text-primary">Total </span> Meal List :
         <span className="text-secondary">{meals.length}</span>
       </h1>
+
+      {/*  here is the date bar  */}
+      <div>
+        <legend className="py-2">Short by date </legend>
+        <input type="month" value={selectedMonth} className="input input-border input-primary" onChange={(e)=>setSelectedMonth(e.target.value)} class="input" />
+      </div>
 
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="table w-full">
