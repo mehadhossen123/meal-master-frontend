@@ -29,10 +29,10 @@ const useExpense = ({ selectedEmail ,month }) => {
     isLoading: allExpensesLoading,
     refetch: allRefetch,
   } = useQuery({
-    queryKey: ["expenses/all"],
+    queryKey: ["expenses/all",month],
 
     queryFn: async () => {
-      const res = await publicAxios.get(`/expenses/all`);
+      const res = await publicAxios.get(`/expenses/all?month=${month}`);
       return res.data;
     },
   });

@@ -19,20 +19,25 @@ import { motion } from "framer-motion";
 const MyReport = () => {
     const { user } = use(AuthContext);
      const [selectedEmail, setSelectedEmail] = useState(user?.email);
+     const [selectedMonth, setSelectedMonth]=useState(new Date().toISOString().substring(0,7))
+     console.log("wanted date : ",selectedMonth)
   const {
     personalTotalMeals,
     personalMealLoading,
     allMealLoading,
     totalMeals,
-  } = useMeal({selectedEmail});
+  } = useMeal({ selectedEmail,month:selectedMonth });
   const {
     personalTotalExpense,
     allExpenses,
     allExpensesLoading,
     personalExpenseLoading,
-  } = useExpense({selectedEmail});
+  } = useExpense({selectedEmail,month:selectedMonth});
   const { userRole } = useRole();
   const { users } = useUsers();
+
+  console.log("Total mess meal : ",totalMeals);
+  console.log("total mess cost : ",allExpenses);
   
  
   
@@ -69,7 +74,22 @@ const MyReport = () => {
             Real-time summary of your meals and expenses.
           </p>
         </div>
-        {userRole == "manager" && (
+        {/* filter with  month  */}
+         <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-4 py-2 rounded-xl w-full sm:w-auto">
+                    
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase font-black text-gray-400">
+                        Filter Month
+                      </span>
+                      <input
+                        type="month"
+                        value={selectedMonth}
+                        onChange={(e) => setSelectedMonth(e.target.value)}
+                        className="bg-transparent text-sm font-bold focus:outline-none text-gray-700 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+        {userRole == "manager" && 
           <div>
             <legend className="py-2">Short by member name</legend>
             <select
@@ -86,7 +106,7 @@ const MyReport = () => {
               ))}
             </select>
           </div>
-        )}
+        }
       </div>
 
       {/* Stats Grid */}

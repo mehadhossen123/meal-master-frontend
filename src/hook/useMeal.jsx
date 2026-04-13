@@ -3,15 +3,15 @@ import { AuthContext } from '../auth/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import useAxios from './axios/useAxios';
 
-const useMeal = ({ selectedEmail }) => {
+const useMeal = ({ selectedEmail ,month}) => {
   const { user } = use(AuthContext);
   const fetchEmail=selectedEmail|| user?.email
   const publicAxios = useAxios();
   const { data: meals, isLoading: personalMealLoading } = useQuery({
-    queryKey: ["meal",fetchEmail],
+    queryKey: ["meal",fetchEmail,month],
     enabled: !!fetchEmail,
     queryFn: async () => {
-      const res = await publicAxios.get(`/meal?email=${fetchEmail}`);
+      const res = await publicAxios.get(`/meal?email=${fetchEmail}&month=${month}`);
       return res?.data;
     },
   });
@@ -26,10 +26,10 @@ const useMeal = ({ selectedEmail }) => {
   }, 0);
 
   const { data: allMeals, isLoading: allMealLoading } = useQuery({
-    queryKey: ["meal/all"],
+    queryKey: ["meal/all",month],
 
     queryFn: async () => {
-      const res = await publicAxios.get(`/meal/all`);
+      const res = await publicAxios.get(`/meal/all?month=${month}`);
       return res?.data;
     },
   });
