@@ -3,7 +3,7 @@ import React, { use } from 'react';
 import { AuthContext } from '../auth/AuthContext';
 import useAxios from './axios/useAxios';
 
-const useExpense = ({ selectedEmail }) => {
+const useExpense = ({ selectedEmail ,month }) => {
   const publicAxios = useAxios();
   const { user } = use(AuthContext);
   const fetchEmail=selectedEmail||user?.email;
@@ -15,10 +15,10 @@ const useExpense = ({ selectedEmail }) => {
     isLoading: personalExpenseLoading,
     refetch,
   } = useQuery({
-    queryKey: ["expenses", fetchEmail],
+    queryKey: ["expenses", fetchEmail,month],
     enabled: !!fetchEmail,
     queryFn: async () => {
-      const res = await publicAxios.get(`/expenses?email=${fetchEmail}`);
+      const res = await publicAxios.get(`/expenses?email=${fetchEmail}&month=${month}`);
       return res.data;
     },
   });
