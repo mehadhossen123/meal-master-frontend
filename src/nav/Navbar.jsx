@@ -4,16 +4,25 @@ import { AuthContext } from "../auth/AuthContext";
 import Logo from "../component/Logo";
 import Swal from "sweetalert2";
 import { IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import {
+  MdOutlineAnalytics,
+  MdOutlineSpaceDashboard,
+  MdOutlineAddCircleOutline,
+  MdOutlineHome,
+} from "react-icons/md";
+import useRole from "../hook/useRole";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const {userRole} =useRole()
 
   const defaultUserImg =
     "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
 
-  // থিম ইমপ্লিমেন্টেশন
+  // থিম এবং স্ক্রল হ্যান্ডলিং
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     if (theme === "dark") {
@@ -22,52 +31,51 @@ const Navbar = () => {
       document.documentElement.classList.remove("dark");
     }
     localStorage.setItem("theme", theme);
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [theme]);
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
+  const linkStyles = ({ isActive }) =>
+    `font-semibold flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 ${
+      isActive
+        ? "text-primary bg-primary/10"
+        : theme === "dark"
+          ? "text-gray-300 hover:text-white hover:bg-slate-800"
+          : "text-slate-600 hover:text-primary hover:bg-gray-100"
+    }`;
+
   const links = (
     <>
       <li>
-        <NavLink
-          className={({ isActive }) =>
-            `font-medium ${isActive ? "text-primary font-bold underline" : theme === "dark" ? "text-gray-300" : "text-slate-700"}`
-          }
-          to="/"
-        >
-          Home
+        <NavLink className={linkStyles} to="/">
+          <MdOutlineHome size={20} />
+          <span>Home</span>
         </NavLink>
       </li>
       <li>
-        <NavLink
-          className={({ isActive }) =>
-            `font-medium ${isActive ? "text-primary font-bold underline" : theme === "dark" ? "text-gray-300" : "text-slate-700"}`
-          }
-          to="/add-expense"
-        >
-          Add Expense
+        <NavLink className={linkStyles} to="/add-expense">
+          <MdOutlineAddCircleOutline size={20} />
+          <span>Add Expense</span>
         </NavLink>
       </li>
       <li>
-        <NavLink
-          className={({ isActive }) =>
-            `font-medium ${isActive ? "text-primary font-bold underline" : theme === "dark" ? "text-gray-300" : "text-slate-700"}`
-          }
-          to="/report"
-        >
-          Report
+        <NavLink className={linkStyles} to="/report">
+          <MdOutlineAnalytics size={20} />
+          <span>Monthly Insights</span>
         </NavLink>
       </li>
       <li>
-        <NavLink
-          className={({ isActive }) =>
-            `font-medium ${isActive ? "text-primary font-bold underline" : theme === "dark" ? "text-gray-300" : "text-slate-700"}`
-          }
-          to="/dashboard"
-        >
-          Dashboard
+        <NavLink className={linkStyles} to="/dashboard">
+          <MdOutlineSpaceDashboard size={20} />
+          <span>Dashboard</span>
         </NavLink>
       </li>
     </>
@@ -79,17 +87,26 @@ const Navbar = () => {
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "Logout successful",
+        title: "Logged out successfully",
         showConfirmButton: false,
         timer: 1500,
+        background: theme === "dark" ? "#1e293b" : "#fff",
+        color: theme === "dark" ? "#fff" : "#000",
       });
     });
   };
 
   return (
     <nav
-      className={`navbar fixed top-0 left-0 right-0 border-b-0 z-[100] shadow-md px-4 lg:px-10 transition-colors duration-300 border-b 
-      ${theme === "light" ? "bg-white" : "bg-slate-900"}`}
+      className={`navbar fixed top-0 left-0 right-0 z-[100] px-4 lg:px-10 transition-all duration-300 border-b ${
+        isScrolled
+          ? theme === "light"
+            ? "bg-white/80 backdrop-blur-md border-gray-100 shadow-sm py-2"
+            : "bg-slate-900/80 backdrop-blur-md border-slate-800 shadow-lg py-2"
+          : theme === "light"
+            ? "bg-white border-transparent py-4"
+            : "bg-slate-900 border-transparent py-4"
+      }`}
     >
       {/* Navbar Start */}
       <div className="navbar-start">
@@ -97,7 +114,7 @@ const Navbar = () => {
           <div
             tabIndex={0}
             role="button"
-            className={`btn btn-ghost ${theme === "dark" ? "text-white hover:bg-slate-800" : "text-slate-900 hover:bg-gray-100"}`}
+            className={`btn btn-ghost btn-circle ${theme === "dark" ? "text-white" : "text-slate-900"}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -116,79 +133,91 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-2xl rounded-box w-52 border 
-            ${theme === "light" ? "bg-white border-gray-100 text-slate-800" : "bg-slate-800 border-slate-700 text-white"}`}
+            className={`menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-2xl rounded-2xl w-64 border ${
+              theme === "light"
+                ? "bg-white border-gray-100"
+                : "bg-slate-800 border-slate-700"
+            }`}
           >
             {links}
           </ul>
         </div>
-        <div className="hidden lg:block">
+        <div className="hidden lg:block transform hover:scale-105 transition-transform">
           <Logo />
         </div>
       </div>
 
       {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 gap-4 italic">{links}</ul>
+        <ul className="flex items-center gap-2">{links}</ul>
       </div>
 
       {/* Navbar End */}
       <div className="navbar-end gap-3">
-        {/* Toggle Icon */}
-        <div
+        {/* Theme Toggle */}
+        <button
           onClick={toggleTheme}
-          className={`cursor-pointer p-2.5 rounded-full transition-all border 
-          ${theme === "light" ? "bg-gray-100 border-gray-200 hover:bg-gray-200" : "bg-slate-800 border-slate-700 hover:bg-slate-700"}`}
+          className={`p-2.5 rounded-xl transition-all border ${
+            theme === "light"
+              ? "bg-gray-50 border-gray-200 hover:border-primary/30"
+              : "bg-slate-800 border-slate-700 hover:border-primary/30"
+          }`}
         >
           {theme === "light" ? (
-            <IoMoonOutline size={22} className="text-slate-700" />
+            <IoMoonOutline size={20} className="text-slate-700" />
           ) : (
-            <IoSunnyOutline size={22} className="text-yellow-400" />
+            <IoSunnyOutline size={20} className="text-yellow-400" />
           )}
-        </div>
+        </button>
 
         {user ? (
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar border-2 border-primary p-0.5"
+              className="group flex items-center gap-2 cursor-pointer"
             >
-              <div className="w-full rounded-full">
-                <img alt="Profile" src={user?.photoURL || defaultUserImg} />
+              <div className="hidden md:block text-right">
+                <p
+                  className={`text-xs font-bold ${theme === "dark" ? "text-white" : "text-slate-900"}`}
+                >
+                  {user?.displayName?.split(" ")[0]}
+                </p>
+                <p className="text-[10px] text-slate-500 font-medium">{userRole}</p>
+              </div>
+              <div className="avatar">
+                <div className="w-10 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden transition-all group-hover:ring-offset-4">
+                  <img src={user?.photoURL || defaultUserImg} alt="profile" />
+                </div>
               </div>
             </div>
             <ul
               tabIndex={0}
-              className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl rounded-box w-56 border 
-              ${theme === "light" ? "bg-white border-gray-100 text-slate-800" : "bg-slate-800 border-slate-700 text-white"}`}
+              className={`menu menu-sm dropdown-content mt-4 z-[1] p-3 shadow-2xl rounded-2xl w-64 border ${
+                theme === "light"
+                  ? "bg-white border-gray-100"
+                  : "bg-slate-800 border-slate-700"
+              }`}
             >
-              <div
-                className={`px-4 py-3 border-b mb-1 ${theme === "light" ? "border-gray-100" : "border-slate-700"}`}
-              >
-                <p className="font-bold text-sm truncate">
-                  {user?.displayName || "User"}
-                </p>
+              <div className="px-3 py-3 border-b border-slate-100 dark:border-slate-700 mb-2">
                 <p
-                  className={`text-xs truncate ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}
+                  className={`font-bold text-sm ${theme === "dark" ? "text-white" : "text-slate-900"}`}
                 >
-                  {user?.email}
+                  {user?.displayName}
                 </p>
+                <p className="text-xs text-slate-500 truncate">{user?.email}</p>
               </div>
               <li>
-                <Link to="/dashboard" className="py-2">
-                  Dashboard
+                <Link to="/dashboard" className="py-2.5 rounded-lg">
+                  User Dashboard
                 </Link>
               </li>
-              <hr
-                className={`my-1 opacity-50 ${theme === "light" ? "border-gray-100" : "border-slate-700"}`}
-              />
-              <li>
+              <li className="mt-2">
                 <button
                   onClick={handleLogout}
-                  className="text-red-500 font-bold hover:bg-red-50 dark:hover:bg-red-900/20 py-2"
+                  className="bg-red-50 dark:bg-red-500/10 text-red-600 font-bold py-2.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20"
                 >
-                  Logout
+                  Sign Out
                 </button>
               </li>
             </ul>
@@ -196,7 +225,7 @@ const Navbar = () => {
         ) : (
           <Link
             to="/auth/login"
-            className="btn btn-primary btn-sm px-6 rounded-full text-white"
+            className="btn btn-primary btn-sm h-10 px-6 rounded-xl text-white shadow-lg shadow-primary/20"
           >
             Login
           </Link>
